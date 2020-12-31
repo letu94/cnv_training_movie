@@ -33,17 +33,13 @@ class _DashBoardScreenState
             HeaderImage(),
             rowButton(),
             Container(
-              height: 450,
+              height: 430,
               child: PageView.builder(
                   controller: provider.controllerPageView,
                   itemCount: provider.pages.length,
                   itemBuilder: (ctx, index) => provider.pages[index]),
             ),
             searchCinema(),
-            Container(
-              color: Colors.grey,
-              height: 10,
-            )
           ],
         ),
       ),
@@ -62,7 +58,9 @@ class _DashBoardScreenState
                   child: Text(
                     provider.tabMovie[0],
                     style: TextStyle(
-                        color: indexTab.value == 0 ? Colors.red : Colors.black),
+                        color: indexTab.value == 0
+                            ? Colors.black
+                            : Colors.grey[400]),
                   ),
                   onPressed: () {
                     provider.onPageChange(0);
@@ -72,7 +70,9 @@ class _DashBoardScreenState
                   child: Text(
                     provider.tabMovie[1],
                     style: TextStyle(
-                        color: indexTab.value == 1 ? Colors.red : Colors.black),
+                        color: indexTab.value == 1
+                            ? Colors.black
+                            : Colors.grey[400]),
                   ),
                   onPressed: () {
                     provider.onPageChange(1);
@@ -82,7 +82,9 @@ class _DashBoardScreenState
                   child: Text(
                     provider.tabMovie[2],
                     style: TextStyle(
-                        color: indexTab.value == 2 ? Colors.red : Colors.black),
+                        color: indexTab.value == 2
+                            ? Colors.black
+                            : Colors.grey[400]),
                   ),
                   onPressed: () {
                     provider.onPageChange(2);
@@ -98,25 +100,34 @@ class _DashBoardScreenState
 }
 
 searchCinema() {
-  return Container(
-      child: Row(
+  return Column(
     children: [
-      SizedBox(
-        width: 10,
-      ),
-      Expanded(
-        child: TextField(
-          decoration: InputDecoration(
-              hintText: 'Tim rap gan ban',
-              hintStyle: TextStyle(color: Colors.grey)),
-        ),
-      ),
-      IconButton(icon: Icon(Icons.send_outlined), onPressed: () {})
+      Container(
+          child: Row(
+        children: [
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                  hintText: 'Tìm rạp gần bạn...',
+                  hintStyle: TextStyle(color: Colors.grey)),
+            ),
+          ),
+          IconButton(icon: Icon(Icons.send_outlined), onPressed: () {})
+        ],
+      )),
+      Container(
+        color: Colors.grey[400],
+        height: 10,
+      )
     ],
-  ));
+  );
 }
 
-movieItemSmall(BuildContext context, MovieItem movieItem, Color colorText, Color background) {
+movieItemSmall(BuildContext context, MovieItem movieItem, Color colorText,
+    Color background) {
   return Container(
     color: background,
     child: Row(
@@ -129,14 +140,16 @@ movieItemSmall(BuildContext context, MovieItem movieItem, Color colorText, Color
               children: [
                 Text(
                   movieItem.show == null ? '' : movieItem.show.name,
-                  style:
-                      TextStyle(fontSize: 18, fontFamily: 'Bold', color: colorText),
+                  style: TextStyle(
+                      fontSize: 18, fontFamily: 'Bold', color: colorText),
                   overflow: TextOverflow.ellipsis,
                 ),
                 (movieItem.show == null || movieItem.show.language == null)
                     ? SizedBox()
                     : Text(
-                        movieItem.show.language,
+                        movieItem.show.runtime.toString() +
+                            'mins ' +
+                            movieItem.show.premiered.toString(),
                         style: TextStyle(color: colorText),
                       ),
               ],
@@ -144,18 +157,20 @@ movieItemSmall(BuildContext context, MovieItem movieItem, Color colorText, Color
           ),
         ),
         Container(
-          padding: EdgeInsets.all(5),
+          padding: EdgeInsets.all(10),
           margin: EdgeInsets.all(10),
           child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, 'bookTicket', arguments: movieItem);
+                Navigator.pushNamed(context, 'bookTicket',
+                    arguments: movieItem);
               },
               child: Text(
-                'Dat ve',
-                style: TextStyle(color: Colors.white),
+                'Đặt vé',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               )),
           decoration: BoxDecoration(
-              color: Colors.brown,
+              color: Colors.red[900],
               borderRadius: BorderRadius.all(Radius.circular(20))),
         )
       ],

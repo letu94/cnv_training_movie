@@ -12,30 +12,6 @@ class BookTicketScreen extends StatefulWidget {
 
 class BookTicketScreenState
     extends BasePage<BookTicketScreen, BookTicketScreenProvider> {
-  List<int> listSeat = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-  List<int> listSeatFinal = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18
-  ];
-
-  List<String> bookList = [];
-
   @override
   Widget body() {
     final MovieItem args = ModalRoute.of(context).settings.arguments;
@@ -53,6 +29,7 @@ class BookTicketScreenState
   void initState() {
     super.initState();
     appBar = AppBar(
+      backgroundColor: Colors.white,
       automaticallyImplyLeading: true,
       iconTheme: IconThemeData(color: Colors.brown),
       actions: [
@@ -63,7 +40,10 @@ class BookTicketScreenState
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('CGV Aeon Binh Tan'),
+          Text(
+            'CGV Aeon Binh Tan',
+            style: TextStyle(color: Colors.black),
+          ),
           Text(
             'Cinema 4, ngay 19/2/2020',
             style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -71,7 +51,6 @@ class BookTicketScreenState
         ],
       ),
     );
-    background = Colors.black;
   }
 
   Widget _buildMainView(BuildContext context, MovieItem args) {
@@ -83,54 +62,64 @@ class BookTicketScreenState
             height: 200,
             child: Center(
                 child: Text(
-              'Man hinh'.toUpperCase(),
+              'Màn hình'.toUpperCase(),
               style: TextStyle(fontSize: 30, color: Colors.white),
             )),
           ),
-          Container(
-            color: Colors.amber,
-            child: Center(child: Text('Ghe ngoi')),
-          ),
-          itemSeat('A', listSeat, background: Colors.grey),
-          itemSeat('B', listSeat, background: Colors.grey),
-          itemSeat('C', listSeat, background: Colors.grey),
-          itemSeat('D', listSeat, background: Colors.grey),
-          itemSeat(
-            'E',
-            listSeat,
-          ),
-          itemSeat(
-            'F',
-            listSeat,
-          ),
-          itemSeat(
-            'G',
-            listSeat,
-          ),
-          itemSeat(
-            'H',
-            listSeat,
-          ),
-          itemSeat('S', listSeatFinal, background: Colors.pink),
+          itemSeat('A', provider.listSeat,
+              background: Color.fromRGBO(152, 141, 124, 1.0)),
+          itemSeat('B', provider.listSeat,
+              background: Color.fromRGBO(152, 141, 124, 1.0)),
+          itemSeat('C', provider.listSeat,
+              background: Color.fromRGBO(152, 141, 124, 1.0)),
+          itemSeat('D', provider.listSeat,
+              background: Color.fromRGBO(152, 141, 124, 1.0)),
+          itemSeat('E', provider.listSeat),
+          itemSeat('F', provider.listSeat),
+          itemSeat('G', provider.listSeat),
+          itemSeat('H', provider.listSeat),
+          itemSeat('S', provider.listSeatFinal, background: Colors.pink),
 
           /// annotation
-          itemAnotation('Da dat', Colors.white, 'Thuong', Colors.grey,
-              'Ghe doi', Colors.purple, 'Khuyet tat', Colors.green),
-          itemAnotation('Dang chon', Colors.red, 'VIP', Colors.brown, 'Ghe doi',
-              Colors.purple, 'Sweet box', Colors.pink),
-          itemAnotation('4DX', Colors.amber, 'Lamour', Colors.brown[300],
-              'Prenium', Colors.blueGrey, 'Gold class', Colors.brown[700]),
+          itemAnotation(
+              'Đã đặt',
+              Colors.white,
+              'Thường',
+              Colors.grey,
+              'Ghế đôi',
+              Color.fromRGBO(97, 50, 123, 1.0),
+              'Khuyết tật',
+              Colors.green),
+          itemAnotation(
+              'Đang chọn',
+              Colors.red,
+              'VIP',
+              Color.fromRGBO(124, 50, 68, 1.0),
+              'Deluxe',
+              Color.fromRGBO(49, 63, 136, 1.0),
+              'Sweet box',
+              Colors.pink),
+          itemAnotation(
+              '4DX',
+              Color.fromRGBO(99, 98, 18, 1.0),
+              'Lamour',
+              Color.fromRGBO(57, 45, 37, 1.0),
+              'Prenium',
+              Color.fromRGBO(128, 150, 197, 1.0),
+              'Gold class',
+              Colors.brown[700]),
           Padding(
             padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
             child: Row(
               children: [
-                item('Khac', Colors.white),
+                item('Khác', Color.fromRGBO(157, 138, 10, 1.0)),
                 Expanded(child: SizedBox(), flex: 3),
               ],
             ),
           ),
           Expanded(child: SizedBox()),
-          bookTicketMovie(context, args, Colors.black, bookList, Colors.white),
+          bookTicketMovie(
+              context, args, Colors.black, provider.bookList, Colors.white),
         ],
       ),
     );
@@ -165,7 +154,8 @@ class BookTicketScreenState
     );
   }
 
-  itemSeat(String string, List<int> seat, {Color background = Colors.brown}) {
+  itemSeat(String string, List<int> seat,
+      {Color background = const Color.fromRGBO(123, 50, 68, 1.0)}) {
     return Consumer<ColorSeatNotifier>(
       builder: (context, color, _) {
         return Column(
@@ -174,21 +164,25 @@ class BookTicketScreenState
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: seat.reversed
                     .map((e) => SeatView(
-                          background: background,
+                          background: provider.selectedList
+                                  .contains(string + e.toString())
+                              ? Colors.white
+                              : background,
                           string: string,
                           seatNumber: e,
                           onTapSeat: (string, seatNumber) {
                             var _item = string + seatNumber.toString();
-                            var _hasItem = bookList.contains(_item);
+                            var _hasItem = provider.bookList.contains(_item);
                             print(_hasItem);
+
                             if (_hasItem) {
-                              bookList.remove(_item);
+                              provider.bookList.remove(_item);
                             } else {
-                              bookList.add(_item);
+                              provider.bookList.add(_item);
                             }
                             // bookList.add(string + seatNumber.toString());
                             // bookList = bookList.toSet().toList();
-                            print(bookList);
+                            print(provider.bookList);
                           },
                         ))
                     .toList()),
@@ -228,42 +222,44 @@ bookTicketMovie(BuildContext context, MovieItem movieItem, Color colorText,
             ),
           ),
         ),
-        Container(
-          padding: EdgeInsets.all(5),
-          margin: EdgeInsets.all(10),
-          child: InkWell(
-              onTap: () {
-                print('object');
-                showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                          title: Text('Book ve xem phim'),
-                          content: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Phim: ${movieItem.show.name}'),
-                              Text(bookList.isEmpty
-                                  ? 'So ghe da dat: 0'
-                                  : 'So ghe da dat: ${bookList.length}'),
-                              Text(bookList.isEmpty
-                                  ? 'Chua dat ghe'
-                                  : 'Ghe da dat: ${bookList.map((e) => e.toString()).toList()}'),
-                            ],
+        InkWell(
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (_) => Container(
+                        height: 400,
+                        child: AlertDialog(
+                          title: Text('Book vé xem phim'),
+                          content: Container(
+                            height: 100,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Phim: ${movieItem.show.name}'),
+                                Text(bookList.isEmpty
+                                    ? 'Số ghế đã đặt: 0'
+                                    : 'Số ghế đã đặt: ${bookList.length}'),
+                                Text(bookList.isEmpty
+                                    ? 'Bạn chưa đặt ghế'
+                                    : 'Ghế đã đặt: ${bookList.map((e) => e.toString())}'),
+                              ],
+                            ),
                           ),
                           actions: <Widget>[
                             Container(
                               child: FlatButton(
-                                child: Text('Close'.toUpperCase()),
+                                child: Text('Đóng'.toUpperCase()),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
                               ),
                             ),
+                            SizedBox(width: 30),
                             Container(
                               color: Colors.blue,
                               child: FlatButton(
                                 child: Text(
-                                  'Confirm'.toUpperCase(),
+                                  'Xác nhận'.toUpperCase(),
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () {
@@ -272,16 +268,21 @@ bookTicketMovie(BuildContext context, MovieItem movieItem, Color colorText,
                               ),
                             )
                           ],
-                        ));
-              },
+                        ),
+                      ));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.red[900],
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.all(10),
               child: Text(
-                'Dat ve',
-                style: TextStyle(color: Colors.white),
-              )),
-          decoration: BoxDecoration(
-              color: Colors.brown,
-              borderRadius: BorderRadius.all(Radius.circular(20))),
-        )
+                'Đặt vé',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ))
       ],
     ),
   );

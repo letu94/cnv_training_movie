@@ -34,7 +34,7 @@ dependencies:
   shared_preferences: ^0.5.12+4
   carousel_slider: ^2.3.1
   flutter_html: ^0.8.2
-  video_player: ^1.0.1
+  video_player: ^0.10.1
   transparent_image: ^1.0.0
 
 

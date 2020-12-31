@@ -10,7 +10,7 @@ class MovieItem {
 }
 
 class Show {
-  Image urlImageList;
+  ImageUrl urlImageList;
   String name;
   String summary;
   List<String> genres;
@@ -23,7 +23,7 @@ class Show {
 
   Show.fromJson(Map<String, dynamic> json) {
     urlImageList =
-      json['image'] == null ? Image('', '') : Image.fromJson(json['image']);
+      json['image'] == null ? ImageUrl('', '') : ImageUrl.fromJson(json['image']);
     name = json['name'];
     summary = json['summary'];
     genres = List.from((json['genres'].map((e) => e.toString())));
@@ -33,12 +33,12 @@ class Show {
   }
 }
 
-class Image {
+class ImageUrl {
   String urlMedium;
   String urlOriginal;
-  Image(this.urlMedium, this.urlOriginal);
+  ImageUrl(this.urlMedium, this.urlOriginal);
 
-  Image.fromJson(Map<String, dynamic> json) {
+  ImageUrl.fromJson(Map<String, dynamic> json) {
     urlMedium = json['medium'];
     urlOriginal = json['original'];
   }

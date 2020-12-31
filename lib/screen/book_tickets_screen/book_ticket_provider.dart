@@ -14,7 +14,30 @@ class BookTicketScreenProvider extends BaseProvider {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   ColorSeatNotifier colorSeatNotifier = new ColorSeatNotifier(null);
   // Color bookSeat = Colors.white;
+List<int> listSeat = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+  List<int> listSeatFinal = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ];
+  List<String> selectedList = ['C10', 'C11', 'G10', 'G11', 'S10', 'S11'];
 
+  List<String> bookList = [];
   List<List<String>> seats = [];
   init(){
 

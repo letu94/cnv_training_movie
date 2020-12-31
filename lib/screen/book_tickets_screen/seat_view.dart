@@ -18,13 +18,12 @@ class SeatView extends StatefulWidget {
 }
 
 class _SeatViewState extends BaseView<SeatView, SeatProvider> {
-  bool selected = false;
   Color original;
   @override
   void initState() {
     super.initState();
-    original = widget.background;
   }
+
   @override
   Widget body() {
     return Consumer<ColorSeatNotifier>(
@@ -34,24 +33,50 @@ class _SeatViewState extends BaseView<SeatView, SeatProvider> {
             // selected = !selected;
             // if(selected){
 // provider.bookSeat(widget.background);
-            widget.onTapSeat(widget.string, widget.seatNumber);
-  provider.setColor();
+            if (provider.selectedList
+                .contains(widget.string + widget.seatNumber.toString())) {
+              showDialog(
+                  context: context,
+                  builder: (_) => Container(
+                        height: 400,
+                        child: AlertDialog(
+                          title: Text('Chỗ ngồi đã được đặt'),
+                          content: Text('Vui lòng chọn vị trí khác'),
+                          actions: <Widget>[
+                            Container(
+                              child: FlatButton(
+                                child: Text('Đóng'.toUpperCase()),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ));
+            }
+            if (widget.background == Colors.white) {
+            } else {
+              widget.onTapSeat(widget.string, widget.seatNumber);
+              provider.setColor();
+            }
+
             // } else {
             //   // widget.background = original;
             // }
-            
-            
           },
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                  width: 21,
+                  height: 15,
+                  alignment: Alignment.center,
+                  width: 15,
                   color: color.value == null ? widget.background : color.value,
-                  child: Center(
-                    child: Text(
-                      widget.string + '${widget.seatNumber.toString()} ',
-                      style: TextStyle(color: Colors.white, fontSize: 10),
-                    ),
+                  child: Text(
+                    widget.string + '${widget.seatNumber.toString()} ',
+                    style: TextStyle(color: Colors.white, fontSize: 6),
+                    textAlign: TextAlign.center,
                   )),
               SizedBox(width: 1)
             ],

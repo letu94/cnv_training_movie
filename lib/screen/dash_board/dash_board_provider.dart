@@ -15,7 +15,7 @@ import 'dash_board_screen.dart';
 class DashBoardScreenProvider extends BaseProvider {
   DashBoardScreenProvider(State<DashBoardScreen> state) : super(state);
 
-  final tabMovie = ["Dang chieu", "Dac biet", "Sap chieu"];
+  final tabMovie = ["Đang chiếu", "Đặc biệt", "Sắp chiếu"];
   final pages = [ShowingMovie(), SpecialMovie(), UpcomingMovie()];
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   PageController controllerPageView =

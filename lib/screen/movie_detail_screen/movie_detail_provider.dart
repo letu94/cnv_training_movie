@@ -8,22 +8,34 @@ import 'package:video_player/video_player.dart';
 import 'movie_detail_screen.dart';
 
 class MovieDetailScreenProvider extends BaseProvider {
-  MovieDetailScreenProvider(State<MovieDeatailScreen> state) : super(state);
+  MovieDetailScreenProvider(State<MovieDeatailScreen> state) : super(state){
+    init();
+  }
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  SeeMoreNotifier seeMoreNotifier = new SeeMoreNotifier(200);
+  SeeMoreNotifier seeMoreNotifier = new SeeMoreNotifier(300);
   bool isExpanded = false;
   VideoPlayerController controller;
   bool readMore = true;
 
+Future<void> initializeVideo;
 
+init(){
+  controller = VideoPlayerController.network("http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4");
+  initializeVideo = controller.initialize();
+  controller.setLooping(true);
+  controller.setVolume(1.0);
+}
   
+  playVideo(){
+    if(controller.value.isPlaying){
+      controller.pause();
+    } else controller.play();
+  }
 
 void onTapLink() {
     readMore = !readMore;
   }
-  // int end = 100;
-  // final MovieItem args = ModalRoute.of(state.widget.context).settings.arguments;
 
   String cutString(String string) {
     RegExp exp = new RegExp(r"(<p>, </p>)");
@@ -42,9 +54,6 @@ void onTapLink() {
     isExpanded = false;
   }
 
-  playVideo() {
-    controller.value.isPlaying ? controller.pause() : controller.play();
-  }
 
   @override
   List<BaseNotifier> initNotifiers() {

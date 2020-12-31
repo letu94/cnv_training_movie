@@ -47,11 +47,6 @@ headerImage(String url) {
   return Stack(
     alignment: Alignment.center,
     children: [
-      Center(
-        child: Platform.isIOS
-            ? CupertinoActivityIndicator()
-            : CircularProgressIndicator(),
-      ),
       Container(
           width: double.infinity,
           height: 250,

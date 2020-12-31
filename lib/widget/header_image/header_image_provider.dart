@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 class HeaderImageProvider extends BaseProvider<HeaderImageState> {
   HeaderImageProvider(HeaderImageState state) : super(state) {
-    // countDownTimerHeader();
+    countDownTimerHeader();
   }
   PageController controllerPageView = PageController(initialPage: 0);
   HeaderImageNotifier headerImageNotifier = new HeaderImageNotifier([]);
@@ -25,6 +25,7 @@ class HeaderImageProvider extends BaseProvider<HeaderImageState> {
   }
 
   getHeaderImageAPI() async {
+    showLoading();
     var url = 'http://api.tvmaze.com/search/shows?q=avengers';
     var response = await http.get(url);
     hiddenLoading();
