@@ -118,8 +118,8 @@ class BookTicketScreenState
             ),
           ),
           Expanded(child: SizedBox()),
-          bookTicketMovie(
-              context, args, Colors.black, provider.bookList, Colors.white),
+          bookTicketMovie(context, args, Colors.black, provider.listSeatBooked,
+              Colors.white),
         ],
       ),
     );
@@ -156,6 +156,24 @@ class BookTicketScreenState
 
   itemSeat(String string, List<int> seat,
       {Color background = const Color.fromRGBO(123, 50, 68, 1.0)}) {
+    var _typeOfSeat;
+    switch (string) {
+      case ('A'):
+      case ('B'):
+      case ('C'):
+      case ('D'):
+        _typeOfSeat = 'Thường';
+        break;
+      case ('E'):
+      case ('F'):
+      case ('G'):
+      case ('H'):
+        _typeOfSeat = 'VIP';
+        break;
+      case ('S'):
+        _typeOfSeat = 'Sweet box';
+        break;
+    }
     return Consumer<ColorSeatNotifier>(
       builder: (context, color, _) {
         return Column(
@@ -164,6 +182,7 @@ class BookTicketScreenState
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: seat.reversed
                     .map((e) => SeatView(
+                          typeOfSeat: _typeOfSeat,
                           background: provider.selectedList
                                   .contains(string + e.toString())
                               ? Colors.white
@@ -171,17 +190,37 @@ class BookTicketScreenState
                           string: string,
                           seatNumber: e,
                           onTapSeat: (string, seatNumber) {
-                            var _item = string + seatNumber.toString();
+                            var _item = string + e.toString();
                             var _hasItem = provider.bookList.contains(_item);
-                            print(_hasItem);
+                            var item = SeatView(
+                              typeOfSeat: _typeOfSeat,
+                              string: string,
+                              seatNumber: e,
+                              // onTapSeat: (string, seatNumber) {}
+                            );
+                            // var _hasItemSeat =
+                            //     provider.listSeatBooked.contains(item);
 
                             if (_hasItem) {
-                              provider.bookList.remove(_item);
+                              // provider.bookList.remove(_item);
+                              // for (var index in provider.listSeatBooked) {
+                              //   if (string == index.string && e == index.seatNumber) {
+                              //     provider.listSeatBooked.remove(index);
+                              //   }
+                              // }
+                              provider.listSeatBooked.removeWhere(
+                                  (seatbooked) =>
+                                      seatbooked.string == string &&
+                                      e == seatbooked.seatNumber);
                             } else {
                               provider.bookList.add(_item);
+                              provider.listSeatBooked.add(item);
                             }
-                            // bookList.add(string + seatNumber.toString());
-                            // bookList = bookList.toSet().toList();
+                            // provider.bookList
+                            //     .add(string + seatNumber.toString());
+                            // provider.bookList =
+                            //     provider.bookList.toSet().toList();
+                            print(provider.listSeatBooked);
                             print(provider.bookList);
                           },
                         ))
@@ -195,7 +234,7 @@ class BookTicketScreenState
 }
 
 bookTicketMovie(BuildContext context, MovieItem movieItem, Color colorText,
-    List<String> bookList, Color background) {
+    List<SeatView> bookList, Color background) {
   return Container(
     color: background,
     child: Row(
@@ -241,7 +280,10 @@ bookTicketMovie(BuildContext context, MovieItem movieItem, Color colorText,
                                     : 'Số ghế đã đặt: ${bookList.length}'),
                                 Text(bookList.isEmpty
                                     ? 'Bạn chưa đặt ghế'
-                                    : 'Ghế đã đặt: ${bookList.map((e) => e.toString())}'),
+                                    : 'Ghế đã đặt: ${bookList.map((e) => e.string + e.seatNumber.toString() + "-" + e.typeOfSeat.toString())}'),
+                                // Text(bookList.isEmpty
+                                // ? ''
+                                // : 'Loại ghế: ${bookList.map((e) => e.toString())}'),
                               ],
                             ),
                           ),

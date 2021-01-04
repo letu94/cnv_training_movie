@@ -8,17 +8,23 @@ class SeatView extends StatefulWidget {
   final Color background;
   final String string;
   final int seatNumber;
+  final String typeOfSeat;
   final Function(String, int) onTapSeat;
 
   const SeatView(
-      {Key key, this.background, this.string, this.seatNumber, this.onTapSeat})
+      {Key key,
+      this.background,
+      this.string,
+      this.seatNumber,
+      this.onTapSeat,
+      this.typeOfSeat})
       : super(key: key);
   @override
   _SeatViewState createState() => _SeatViewState();
 }
 
 class _SeatViewState extends BaseView<SeatView, SeatProvider> {
-  Color original;
+  String typeOfSeat;
   @override
   void initState() {
     super.initState();
@@ -54,16 +60,10 @@ class _SeatViewState extends BaseView<SeatView, SeatProvider> {
                           ],
                         ),
                       ));
-            }
-            if (widget.background == Colors.white) {
             } else {
               widget.onTapSeat(widget.string, widget.seatNumber);
               provider.setColor();
             }
-
-            // } else {
-            //   // widget.background = original;
-            // }
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
-
 import 'package:movie_application_cnv/base/base_page.dart';
 import 'package:movie_application_cnv/model/movie_item.dart';
 import 'package:movie_application_cnv/screen/movie_detail_screen/movie_detail_provider.dart';
+import 'package:movie_application_cnv/widget/expandable_text.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -20,9 +19,6 @@ class MovieDeatailScreenState
   @override
   Widget body() {
     final MovieItem args = ModalRoute.of(context).settings.arguments;
-    // final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
-    // final colorClickableText = Colors.blue;
-    // final widgetColor = Colors.black;
 
     return SafeArea(
       child: _buildMainView(context, args),
@@ -55,23 +51,6 @@ class MovieDeatailScreenState
     provider.init();
   }
 
-    // provider.controller = VideoPlayerController.network(
-    //     'https://www.youtube.com/watch?v=dSBRQUebo7g')
-    //   ..initialize().then((_) {
-    //     // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-    //     provider.controller = VideoPlayerController.network(
-    //         'https://www.youtube.com/watch?v=V89BOZhJFlI');
-    //   });
-
-//       TextSpan link = TextSpan(
-//   text: provider.readMore ? "... read more" : " read less",
-//   style: TextStyle(
-//     color: colorClickableText,
-//   ),
-//   recognizer: TapGestureRecognizer()..onTap = provider.onTapLink
-// );
-  
-
   @override
   void dispose() {
     super.dispose();
@@ -83,27 +62,30 @@ class MovieDeatailScreenState
       children: [
         Column(
           children: [
-            FutureBuilder(
-                future: provider.initializeVideo,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return AspectRatio(
-                        aspectRatio: provider.controller.value.aspectRatio,
-                        child: VideoPlayer(
-                          provider.controller,
-                        ));
-                  } else
-                    return CircularProgressIndicator();
-                }),
-            FloatingActionButton(
-              onPressed: () {
-                provider.playVideo();
-              },
-              child: provider.controller.value.isPlaying
-                  ? Icon(Icons.pause)
-                  : Icon(Icons.play_arrow)),
-            
-            movieItemSmallDetail(context, movieItem, Colors.black, Colors.white),
+            Stack(alignment: Alignment.center, children: [
+              FutureBuilder(
+                  future: provider.initializeVideo,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return AspectRatio(
+                          aspectRatio: provider.controller.value.aspectRatio,
+                          child: VideoPlayer(
+                            provider.controller,
+                          ));
+                    } else
+                      return CircularProgressIndicator();
+                  }),
+              FloatingActionButton(
+                  // backgroundColor: Colors.white,
+                  onPressed: () {
+                    provider.playVideo();
+                  },
+                  child: provider.controller.value.isPlaying
+                      ? Icon(Icons.pause)
+                      : Icon(Icons.play_arrow)),
+            ]),
+            movieItemSmallDetail(
+                context, movieItem, Colors.black, Colors.white),
             iconRow(),
             moreInfomation(movieItem),
           ],
@@ -153,48 +135,48 @@ class MovieDeatailScreenState
                       right: 8, left: 8, top: 8, bottom: 16),
                   child: Column(
                     children: [
-                      Html(
-                        data: movieItem.show.summary.length < 300
-                            ? movieItem.show.summary
-                            : '${movieItem.show.summary.substring(0, indexSubString.value)}',
-                        defaultTextStyle: TextStyle(fontSize: 16),
-                      ),
+                      ExpandableText(movieItem.show.summary),
+
+                      // Html(
+                      //   data: movieItem.show.summary.length < 300
+                      //       ? movieItem.show.summary
+                      //       : '${movieItem.show.summary.substring(0, indexSubString.value)}',
+                      //   defaultTextStyle: TextStyle(fontSize: 16),
+                      // ),
                     ],
                   ),
                 ),
-                provider.isExpanded == true
-                    ? Positioned(
-                        right: 8,
-                        bottom: 8,
-                        child: movieItem.show.summary.length < 300
-                            ? SizedBox()
-                            : InkWell(
-                                child: Text(
-                                  'thu lại',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color.fromRGBO(
-                                          159, 61, 70, 1.0),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                onTap: () => provider
-                                    .seeLess(movieItem.show.summary)))
-                    : Positioned(
-                        right: 8,
-                        bottom: 8,
-                        child: movieItem.show.summary.length < 300
-                            ? SizedBox()
-                            : InkWell(
-                                child: Text(
-                                  '...xem thêm',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Color.fromRGBO(
-                                          159, 61, 70, 1.0),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                onTap: () => provider
-                                    .seeMore(movieItem.show.summary))),
+                // provider.isExpanded == true
+                //     ? Positioned(
+                //         right: 8,
+                //         bottom: 8,
+                //         child: movieItem.show.summary.length < 300
+                //             ? SizedBox()
+                //             : InkWell(
+                //                 child: Text(
+                //                   'thu lại',
+                //                   style: TextStyle(
+                //                       fontSize: 16,
+                //                       color: Color.fromRGBO(159, 61, 70, 1.0),
+                //                       fontWeight: FontWeight.bold),
+                //                 ),
+                //                 onTap: () =>
+                //                     provider.seeLess(movieItem.show.summary)))
+                // : Positioned(
+                //     right: 8,
+                //     bottom: 8,
+                //     child: movieItem.show.summary.length < 300
+                //         ? SizedBox()
+                //         : InkWell(
+                //             child: Text(
+                //               '...xem thêm',
+                //               style: TextStyle(
+                //                   fontSize: 16,
+                //                   color: Color.fromRGBO(159, 61, 70, 1.0),
+                //                   fontWeight: FontWeight.bold),
+                //             ),
+                //             onTap: () =>
+                //                 provider.seeMore(movieItem.show.summary))),
               ]);
             },
           ),
@@ -208,8 +190,7 @@ class MovieDeatailScreenState
               child: Column(
                 children: [
                   rowItem('Kiểm duyệt', 'Trẻ em dưới 13 tuổi'),
-                  rowItem(
-                      'Khởi chiếu', 'Ngày ${movieItem.show.premiered}'),
+                  rowItem('Khởi chiếu', 'Ngày ${movieItem.show.premiered}'),
                   // rowItem('Thể loại', text2)
                   Row(
                     children: [
@@ -221,8 +202,7 @@ class MovieDeatailScreenState
                               'Thể loại',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color:
-                                      Color.fromRGBO(109, 94, 79, 1.0)),
+                                  color: Color.fromRGBO(109, 94, 79, 1.0)),
                             ),
                             SizedBox(
                               width: 10,
@@ -243,8 +223,8 @@ class MovieDeatailScreenState
                   ),
                   rowItem('Đạo diễn', 'Jake Jason'),
                   rowItem('Diễn viên', 'Tommy, JsckSon, Nick Jonash'),
-                  rowItem('Thời lượng',
-                      movieItem.show.runtime.toString() ?? ''),
+                  rowItem(
+                      'Thời lượng', movieItem.show.runtime.toString() ?? ''),
                   rowItem('Ngôn ngữ',
                       '${movieItem.show.language} - Phụ đề tiếng Việt'),
                 ],

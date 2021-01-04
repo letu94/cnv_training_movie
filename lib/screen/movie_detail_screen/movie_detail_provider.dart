@@ -26,6 +26,10 @@ init(){
   controller.setLooping(true);
   controller.setVolume(1.0);
 }
+
+void onTapLink() {
+    readMore = !readMore;
+  }
   
   playVideo(){
     if(controller.value.isPlaying){
@@ -33,9 +37,6 @@ init(){
     } else controller.play();
   }
 
-void onTapLink() {
-    readMore = !readMore;
-  }
 
   String cutString(String string) {
     RegExp exp = new RegExp(r"(<p>, </p>)");
